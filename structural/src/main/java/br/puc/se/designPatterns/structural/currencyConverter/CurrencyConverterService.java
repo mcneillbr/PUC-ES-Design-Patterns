@@ -1,8 +1,6 @@
 package br.puc.se.designPatterns.structural.currencyConverter;
 
 import br.puc.se.designPatterns.structural.currencyConverter.legacy.LegacyCurrencyConverter;
-import br.puc.se.designPatterns.structural.currencyConverter.legacy.LegacyDatabasePriceProvider;
-import br.puc.se.designPatterns.structural.currencyConverter.legacy.PriceProvider;
 
 
 // Adapting an onlinePriceProvider and the new CurrencyValue object and use the same legacy code
@@ -13,10 +11,9 @@ public class CurrencyConverterService {
 	
 	public CurrencyValue convert(CurrencyValue value, String targetCurrency) {
 		// create an adapter to call the legacy converter using a online price provider	
-
+                CurrencyConverterAdapter adapter = new CurrencyConverterAdapter(onlineProvider);
 		LegacyCurrencyConverter legacyCurrencyConverter = new LegacyCurrencyConverter();
-		PriceProvider priceProvider = new LegacyDatabasePriceProvider();
-		float converted = legacyCurrencyConverter.convert(priceProvider, value.getValue(), value.getCurrencyName(), targetCurrency);
+		float converted = legacyCurrencyConverter.convert(adapter, value.getValue(), value.getCurrencyName(), targetCurrency);
 		return new CurrencyValue(converted, targetCurrency);
 	}
 	
